@@ -35,4 +35,7 @@ howso
     src_pyc
     string_char_def.py
 
+## notice
+使用tesseracr时需要设置TESSDATA_PREFIX
+export TESSDATA_PREFIX=yourpath/tesseract/4.1.0/share/tessdata
 

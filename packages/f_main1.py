@@ -33,6 +33,7 @@ import re
 import oral1_integrate1
 import gapFillAnsPos3
 import preprocess
+import sigle_char_recognize2
 # import position
 import kousuanti
 import sort_position_0603
@@ -41,23 +42,25 @@ import xuehao  # 0514zzh
 # import __pycache__.sigle_char_def as sr
 # import __pycache__.string_char_def as ssr
 
-num_string_model_path = '../oral/num_string_model/num_string_model'
-sign_string_model_path = '../oral/sign_string_model/num_string_model'
-eng_string_model_path = '../oral/eng_string_model/num_string_model'
-chi_string_model_path = '../oral/chi_string_model/num_string_model'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-num_dict = '../oral/dict/num_dict'
-sign_dict = '../oral/dict/sign_dict'
-eng_dict = '../oral/dict/eng_dict'
-chi_dict = '../oral/dict/chi_dict'
+num_string_model_path = os.path.join(BASE_DIR, 'oral/num_string_model/num_string_model')
+sign_string_model_path = os.path.join(BASE_DIR, 'oral/sign_string_model/num_string_model')
+eng_string_model_path = os.path.join(BASE_DIR, 'oral/eng_string_model/num_string_model')
+chi_string_model_path = os.path.join(BASE_DIR, 'oral/chi_string_model/num_string_model')
+
+num_dict = os.path.join(BASE_DIR, 'oral/dict/num_dict')
+sign_dict = os.path.join(BASE_DIR, 'oral/dict/sign_dict')
+eng_dict = os.path.join(BASE_DIR, 'oral/dict/eng_dict')
+chi_dict = os.path.join(BASE_DIR, 'oral/dict/chi_dict')
 
 running_mode = 'cpu'
-save_path = '../oral'
+save_path = os.path.join(BASE_DIR, 'oral')
 
-modelPaperPath = '../oral/real_img/'
-paperListPath = '../oral/ans_img/'
-imgStorePath = '../oral/img_store/'
-csvPath = '../oral/csv/'
+modelPaperPath = os.path.join(BASE_DIR, 'oral/real_img/')
+paperListPath = os.path.join(BASE_DIR, 'oral/ans_img/')
+imgStorePath = os.path.join(BASE_DIR, 'oral/img_store/')
+csvPath = os.path.join(BASE_DIR, 'oral/csv/')
 
 
 def createOutJsonNoAnswerList(jsonData, coorOfPartitions, coordinateOfTitles):
@@ -927,50 +930,39 @@ def screenshotDeepL(deep, outJson, ansImg, daTiNum, titleMin, oralArithmeticCoor
                         cv2.imwrite(deep + '/signImg/' + xiTiAnswer[k] + "/" + str(pictureN) + ".jpg", judgementCropImg)
 
 
-if __name__ == '__main__':
-    outJsonPath = '/home/easyxue/demos/oral/json/'
+def main(inputJsonStr, outJsonPath, deep=""):
     print("AI Analyzer Module...")
     completeJsonData = []
     inputJsonData = {}
     coordinateOfTitlesAll = []
     coorOfPartitionsAll = []
     xiaoTiAll = []
-    deep = ""
 
     try:
-        options, args = getopt.getopt(sys.argv[1:], 'sj:o:d:', ['script', 'json=', 'outjson=', 'deep='])
-    except getopt.GetoptError:
-        print("no valid input argument, exit...")
+        inputJsonData = json.loads(Data)
+    except Exception as e:
+        print(e)
+        print("Input json error, exit...")
         sys.exit()
 
-    for option, value in options:
-        if option in ('-j', '--j'):
-            Data = value
-            # print('inputJsonData is :{}'.format(Data))
-            # print ('ytpe....',type(Data))
-            inputJsonData = json.loads(Data)
-        if option in ('-o', '--o'):
-            outJsonPath = value
-            # print('outJsonPath is :{}'.format(outJsonPath))
-        if option in ('-d', '--d'):
-            deep = value
-            # print('deep is :{}'.format(deep))
-            if not os.path.exists(deep):
-                os.makedirs(deep)
-            if not os.path.exists(deep + '/numImg'):
-                os.makedirs(deep + '/numImg')
-            if not os.path.exists(deep + '/numStringImg'):
-                os.makedirs(deep + '/numStringImg')
-            if not os.path.exists(deep + '/engImg'):
-                os.makedirs(deep + '/engImg')
-            if not os.path.exists(deep + '/engStringImg'):
-                os.makedirs(deep + '/engStringImg')
-            if not os.path.exists(deep + '/chiImg'):
-                os.makedirs(deep + '/chiImg')
-            if not os.path.exists(deep + '/chiStringImg'):
-                os.makedirs(deep + '/chiStringImg')
-            if not os.path.exists(deep + '/signImg'):
-                os.makedirs(deep + '/signImg')
+    if deep:
+        # print('deep is :{}'.format(deep))
+        if not os.path.exists(deep):
+            os.makedirs(deep)
+        if not os.path.exists(deep + '/numImg'):
+            os.makedirs(deep + '/numImg')
+        if not os.path.exists(deep + '/numStringImg'):
+            os.makedirs(deep + '/numStringImg')
+        if not os.path.exists(deep + '/engImg'):
+            os.makedirs(deep + '/engImg')
+        if not os.path.exists(deep + '/engStringImg'):
+            os.makedirs(deep + '/engStringImg')
+        if not os.path.exists(deep + '/chiImg'):
+            os.makedirs(deep + '/chiImg')
+        if not os.path.exists(deep + '/chiStringImg'):
+            os.makedirs(deep + '/chiStringImg')
+        if not os.path.exists(deep + '/signImg'):
+            os.makedirs(deep + '/signImg')
 
     # One more model paper will be passed in
     for modlePaperNum in range(0, len(inputJsonData['modelPaper'])):
@@ -1067,8 +1059,11 @@ if __name__ == '__main__':
                 titleMin = outJson['answerList'][0]['sort']
 
                 if (len(inputJsonData['answerList']) != 0):
+                    global timeN, num_img_path, sign_img_path, eng_img_path, chi_img_path
+                    global num_string_img_path, sign_string_img_path, eng_string_img_path, chi_string_img_path
                     timeN = time.strftime('%d-%H-%M-%S', time.localtime())
                     timeN = timeN + "_" + paperListName + "_"
+                    
                     num_img_path = imgStorePath + timeN + 'num_img'
                     sign_img_path = imgStorePath + timeN + 'sign_img'
                     eng_img_path = imgStorePath + timeN + 'eng_img'
@@ -1146,7 +1141,8 @@ if __name__ == '__main__':
                     print('choiceAll..........', choiceAll)
                     print('judgementAll.........', judgementAll)
                     # Call AI Analyzer Module
-                    os.system('python3 sigle_char_recognize2.py ' + timeN)
+                    sigle_char_recognize2.main(timeN)
+                    # os.system('python3 sigle_char_recognize2.py ' + timeN)
                     # os.system('python3 string_char_recognize2.py ' + timeN)
                     
                     # Obtaining the recognition result of students' answers
@@ -1215,3 +1211,32 @@ if __name__ == '__main__':
     # url = 'http://127.0.0.1:8090/analysis/aiServer/finish?resultPath=%s'%resultPath
     # response = urllib.request.urlopen(url)
     # print ((response.read()).decode('utf-8'))
+
+
+if __name__ == '__main__':
+    try:
+        options, args = getopt.getopt(sys.argv[1:], 'sj:o:d:', ['script', 'json=', 'outjson=', 'deep='])
+    except getopt.GetoptError:
+        print("no valid input argument, exit...")
+        inputJsonData = json.loads(Data)
+    except Exception as e:
+        print(e)
+        print("Input json error, exit...")
+        sys.exit()
+
+    for option, value in options:
+        if option in ('-j', '--j'):
+            Data = value
+            # print('inputJsonData is :{}'.format(Data))
+            # print ('ytpe....',type(Data))
+            # inputJsonData = json.loads(Data)
+        if option in ('-o', '--o'):
+            outJsonPath = value
+            # print('outJsonPath is :{}'.format(outJsonPath))
+        if option in ('-d', '--d'):
+            deep = value
+        else:
+            deep = ""
+    main(Data, outJsonPath, deep)
+
+

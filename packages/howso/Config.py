@@ -5,13 +5,15 @@
 # Embedded file name: Config.py
 # Compiled at: 2019-09-12 11:47:01
 # Size of source mod 2**32: 966 bytes
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import howso.num_alphabets as numalpha, howso.sign_alphabets as signalpha, howso.eng_alphabets as engalpha, howso.chi_alphabets as chialpha, howso.point_alphabets as pointalpha, howso.douhao_alphabets as douhaoalpha
 random_sample = True
 random_seed = 200
 using_cuda = True
 keep_ratio = True
 gpu_id = '0,1'
-model_dir = '../oral/num_string_model'
+model_dir = os.path.join(BASE_DIR, '../oral/num_string_model')
 data_worker = 2
 batch_size = 256
 img_height = 32

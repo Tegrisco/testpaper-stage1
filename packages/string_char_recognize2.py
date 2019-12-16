@@ -1,12 +1,13 @@
 import howso.string_char_def as ssr
 import sys
+import os
 
 #初始化参数
-num_string_model_path = '../oral/num_string_model/num_string_model'
-sign_string_model_path = '../oral/sign_string_model/sign_string_model'
-eng_string_model_path = '../oral/eng_string_model/eng_string_model'
-chi_string_model_path = '../oral/chi_string_model/chi_string_model'
-save_path = '../oral/csv'
+num_string_model_path = os.path.join(BASE_DIR, 'oral/num_string_model/num_string_model')
+sign_string_model_path = os.path.join(BASE_DIR, 'oral/sign_string_model/sign_string_model')
+eng_string_model_path = os.path.join(BASE_DIR, 'oral/eng_string_model/eng_string_model')
+chi_string_model_path = os.path.join(BASE_DIR, 'oral/chi_string_model/chi_string_model')
+save_path = os.path.join(BASE_DIR, 'oral/csv')
 running_mode = 'cpu'
 
 if __name__ == '__main__':
@@ -16,10 +17,10 @@ if __name__ == '__main__':
         print("no valid input argument, exit...")
         sys.exit()
 
-    num_string_img_path = '../oral/img_store/'+ timeN +'num_string_img/'
-    sign_string_img_path = '../oral/img_store/'+ timeN +'sign_string_img/'
-    eng_string_img_path = '../oral/img_store/'+ timeN +'eng_string_img/'
-    chi_strin_img_path = '../oral/img_store/'+ timeN +'chi_string_img'
+    num_string_img_path = os.path.join(BASE_DIR, 'oral/img_store/'+ timeN +'num_string_img/')
+    sign_string_img_path = os.path.join(BASE_DIR, 'oral/img_store/'+ timeN +'sign_string_img/')
+    eng_string_img_path = os.path.join(BASE_DIR, 'oral/img_store/'+ timeN +'eng_string_img/')
+    chi_strin_img_path = os.path.join(BASE_DIR, 'oral/img_store/'+ timeN +'chi_string_img')
 
     ssr.init(num_string_model_path,sign_string_model_path,eng_string_model_path,chi_string_model_path)
     

@@ -3,3 +3,7 @@ __pycache__
 packages/.DS_Store
 venv
 .DS_Store
+results
+packages/test_f.py
+packages/test_f.sh
+packages/template

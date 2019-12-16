@@ -229,8 +229,14 @@ class Paper():
             traceback.print_exc()
             print ('Oops! There is an KeyError while dividing DaTi {}, skip this part...'.format(t.mark))
 
+        # 判断区域是否空白
+        image = self.imageCV2.copy()
+        def region_is_empty(coor):
+            c = coor[1]
+            return not(image[c[1]:c[3], c[0]:c[2]].all())
+
         #print ('coorOfDaTiPartitions is:\n{}'.format(coorOfDaTiPartitions))
-        self.coorOfDaTiPartitions = coorOfDaTiPartitions
+        self.coorOfDaTiPartitions = dict(filter(region_is_empty, coorOfDaTiPartitions.items()))
         #return coorOfDaTiPartitions
 
 
@@ -652,7 +658,12 @@ class Region():
                 with self.c_locale():
                     from tesserocr import iterate_level
                     for r in iterate_level(ri, level):
-                        text = r.GetUTF8Text(level)
+                        try:
+                            text = r.GetUTF8Text(level)
+                        except RuntimeError as e:
+                            # api.End()
+                            print(e)
+                            return coordinate
                         conf = r.Confidence(level)
                         box = r.BoundingBox(level, boxPadding)
                         coordinate[text] = {'box':box, 'conf':conf}

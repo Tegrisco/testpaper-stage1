@@ -21,6 +21,9 @@ import cv2 as cv
 # Standard scientific Python imports
 import numpy as np
 
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def xuehao(imagePath):
     """Fetches the position of XueHao region from a paper image.
@@ -46,7 +49,7 @@ def xuehao(imagePath):
     """
     imgRgb = cv.imread(imagePath)
     imgGray = cv.cvtColor(imgRgb, cv.COLOR_BGR2GRAY)
-    template = cv.imread('xuehao_templates/xuehao.jpg', 0)
+    template = cv.imread(os.path.join(BASE_DIR, 'packages/xuehao_templates/xuehao.jpg'), 0)
     w, h = template.shape[::-1]
     res = cv.matchTemplate(imgGray, template, cv.TM_CCOEFF_NORMED)
     threshold = 0.8

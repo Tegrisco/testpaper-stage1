@@ -13,7 +13,8 @@ def align(refImage, alignedImage):
     """
     ref = cv2.imread(refImage, cv2.IMREAD_COLOR)
     aligned = cv2.imread(alignedImage, cv2.IMREAD_COLOR)
-    imReg = imu.align_images2x2(aligned, ref)
+    # imReg = imu.align_images2x2(aligned, ref)
+    imReg, _ = imu.align_images(aligned, ref)
     return imReg
 
 

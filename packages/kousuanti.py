@@ -100,7 +100,7 @@ def get_template(imagePath, p):
                     cropImage = imgPil.crop((box[0],box[1],box[2],box[3]))
                     #cropImage.show()
                     #cv2.rectangle(img,(box[0],box[1]),(box[2],box[3]),(255,0,0),1)
-                    with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api1:
+                    with PyTessBaseAPI(psm = PSM.SINGLE_LINE) as api1:
                         api1.SetImageFile(imagePath)
                         api1.SetRectangle(box[0], box[1], box[2] - box[0], box[3] - box[1])
                         api1.Recognize()
